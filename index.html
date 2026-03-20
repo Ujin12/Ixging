@@ -363,6 +363,12 @@
       return !!value;
     }
 
+    function normalizeDateOnly(value) {
+      if (!value) return '';
+      const s = String(value);
+      return s.includes('T') ? s.slice(0, 10) : s;
+    }
+
     async function loadFromServer() {
       try {
         const result = await apiGet('all');
@@ -371,7 +377,8 @@
         state.queues = (result.queues || []).map(q => ({
           ...q,
           urgent: toBool(q.urgent),
-          id: String(q.id || Date.now())
+          id: String(q.id || Date.now()),
+          deadline: normalizeDateOnly(q.deadline)
         }));
 
         state.credits = (result.credits || []).map(c => ({
@@ -394,8 +401,9 @@
 
     function formatDateThai(dateStr) {
       if (!dateStr) return '-';
-      const d = new Date(dateStr + 'T00:00:00');
-      return d.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit', year:'2-digit' });
+      const value = normalizeDateOnly(dateStr);
+      const d = new Date(value + 'T00:00:00');
+      return isNaN(d.getTime()) ? value : d.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit', year:'2-digit' });
     }
 
     function formatDateTime(ts) {
