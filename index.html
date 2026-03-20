@@ -331,19 +331,18 @@
     const BRAND_KEY = 'ixging-branding-v2';
     const API_URL = 'https://script.google.com/macros/s/AKfycbxg5nQAJF4NxDB7hyfirthwDscghm_D40ZmvNShvB6qp48grUBz0pLHSwvabx5P9DUHGg/exec';
 
-    let state = JSON.parse(localStorage.getItem(KEY) || '{"mode":"guest","urgent":false,"queues":[],"credits":[],"view":"list"}');
-    let branding = JSON.parse(localStorage.getItem(BRAND_KEY) || '{"brand":"Ixging ʚìɞ","avatar":"","cover":""}');
+    let state = { mode: 'guest', urgent: false, queues: [], credits: [], view: 'list' };
+    let branding = { brand: 'Ixging ʚìɞ', avatar: '', cover: '' };
     let pendingCreditImage = '';
     let pendingAvatarImage = '';
     let pendingCoverImage = '';
 
     function saveState() {
-      localStorage.setItem(KEY, JSON.stringify(state));
-      localStorage.setItem(BRAND_KEY, JSON.stringify(branding));
+      return;
     }
 
     async function apiGet(action = 'all') {
-      const res = await fetch(`${API_URL}?action=${action}`);
+      const res = await fetch(`${API_URL}?action=${action}&t=${Date.now()}`, { cache: 'no-store' });
       return await res.json();
     }
 
