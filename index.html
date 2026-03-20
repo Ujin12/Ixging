@@ -6,48 +6,61 @@
   <title>Ixging Queue App + Credit</title>
   <style>
     :root {
-      --bg1: #fff7fa;
-      --bg2: #fde8ef;
-      --panel: rgba(255,255,255,0.88);
-      --panel-2: rgba(255,245,249,0.95);
-      --pink: #f3b8ca;
-      --pink-2: #e8a8bc;
-      --text: #8e6572;
-      --text-soft: #c99aaa;
-      --line: rgba(243, 184, 202, 0.35);
-      --shadow: 0 16px 40px rgba(241, 176, 197, 0.22);
-      --radius-lg: 24px;
+      --bg1: #fff8fc;
+      --bg2: #ffeef5;
+      --panel: rgba(255,255,255,0.94);
+      --panel-2: rgba(255,247,250,0.98);
+      --pink: #ffc3d7;
+      --pink-2: #ec95b3;
+      --pink-3: #ffe0ea;
+      --cream: #fff9fc;
+      --text: #9a6479;
+      --text-soft: #d2a0b2;
+      --line: rgba(236, 149, 179, 0.20);
+      --shadow: 0 18px 42px rgba(236, 149, 179, 0.18);
+      --radius-lg: 28px;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; }
     body {
       font-family: "Segoe UI", Tahoma, sans-serif;
-      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      background:
+        linear-gradient(180deg, rgba(255,248,252,0.88), rgba(255,239,246,0.90)),
+        url('https://media.discordapp.net/attachments/1314967941682561075/1484585623061925909/b8d7056788ac539fcb980310ca89d204.png?ex=69bec39a&is=69bd721a&hm=434f3647e9926c1ac7f4785461e12b4a3a75e663445c999eb0b2f8a026a1c26b&=&format=webp&quality=lossless&width=169&height=350') center center / cover fixed no-repeat;
       color: var(--text);
       min-height: 100vh;
       padding: 14px;
     }
-    .wrap { max-width: 1180px; margin: 0 auto; }
+    .wrap { width: min(100%, 1020px); margin: 0 auto; display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; }
     .notice {
-      background: rgba(255,255,255,0.7);
-      border: 2px solid rgba(255,255,255,0.9);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,245,249,0.96));
+      border: 2px solid rgba(255,255,255,0.98);
       border-radius: 999px;
       padding: 10px 18px;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       box-shadow: var(--shadow);
-      font-weight: 800;
+      font-weight: 900;
       color: var(--pink-2);
-      margin-bottom: 12px;
+      margin: 0 auto 14px;
+      text-align: center;
+      align-self: center;
     }
     .layout {
+      width: min(100%, 980px);
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: 1.3fr 0.9fr;
-      gap: 18px;
+      grid-template-columns: 560px 380px;
+      gap: 40px;
       align-items: start;
+      justify-content: center;
     }
+    .layout > div:first-child { display:flex; justify-content:center; }
+    .side { width: 100%; max-width: 380px; margin: 0 auto; }
     .phone {
-      background: rgba(255,255,255,0.75);
-      border: 10px solid rgba(255,255,255,0.95);
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,246,250,0.96));
+      border: 10px solid rgba(255,255,255,0.98);
       border-radius: 42px;
       box-shadow: var(--shadow);
       padding: 14px;
@@ -64,17 +77,28 @@
       position: relative;
     }
     .card {
-      background: var(--panel);
-      border: 2px solid rgba(255,255,255,0.9);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,246,250,0.92));
+      border: 2px solid rgba(255,255,255,0.98);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow);
       padding: 14px;
     }
     .hero {
-      background: linear-gradient(180deg, #ffeef4, #ffe4ee);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,236,244,0.34)),
+        url('https://i.pinimg.com/1200x/54/13/14/541314188f2bef9cfd1a5b6b78e982ff.jpg');
+      background-size: cover;
+      background-position: center center;
       position: relative;
       overflow: hidden;
-      min-height: 190px;
+      min-height: 220px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,248,252,0.08), rgba(255,232,241,0.26));
+      pointer-events: none;
     }
     .topbar {
       display: flex;
@@ -83,7 +107,7 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .brand { font-weight: 900; font-size: 28px; color: var(--pink-2); }
+    .brand { font-weight: 900; font-size: 28px; color: var(--pink-2); letter-spacing: 0.5px; text-shadow: 0 3px 10px rgba(245,142,177,0.15); }
     .admin {
       background: #fff7fb;
       color: var(--text-soft);
@@ -108,21 +132,82 @@
     .tiny { font-size: 12px; color: var(--text-soft); }
     .section-title { margin: 14px 0 8px; font-weight: 900; letter-spacing: 2px; color: var(--text-soft); font-size: 12px; }
     .task-list, .credit-list { display: flex; flex-direction: column; gap: 10px; }
+    #listView, #creditView, #doneView { max-height: 420px; overflow-y: auto; padding-right: 6px; }
+    #listView::-webkit-scrollbar, #creditView::-webkit-scrollbar, #doneView::-webkit-scrollbar { width: 8px; }
+    #listView::-webkit-scrollbar-thumb, #creditView::-webkit-scrollbar-thumb, #doneView::-webkit-scrollbar-thumb { background: rgba(245,142,177,0.35); border-radius: 999px; }
+    #listView::-webkit-scrollbar-track, #creditView::-webkit-scrollbar-track, #doneView::-webkit-scrollbar-track { background: rgba(255,255,255,0.45); border-radius: 999px; }
     .task {
       display: grid;
-      grid-template-columns: 4px 1fr auto;
+      grid-template-columns: 6px 1fr auto;
       gap: 12px;
       align-items: center;
-      background: var(--panel-2);
-      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,251,253,1), rgba(255,243,248,0.98));
+      border-radius: 22px;
       padding: 12px;
-      border: 2px solid rgba(255,255,255,0.9);
+      border: 2px solid rgba(255,255,255,0.98);
     }
-    .task-line { height: 100%; border-radius: 999px; background: #b7d8ff; }
+    .task-line { height: 100%; border-radius: 999px; background: linear-gradient(180deg, #ffc1d6, #f58eb1); }
     .task-name { font-size: 14px; font-weight: 900; color: var(--pink-2); }
     .task-meta { font-size: 12px; margin-top: 4px; }
-    .task-right { text-align: right; }
-    .tag { background:#eef6ff; color:#9ab8db; border-radius:999px; padding:4px 8px; font-size:11px; font-weight:800; display:inline-block; }
+    .task-right { text-align: right; display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+    .tag { background:#fff4f8; color:#d47a9a; border:1px solid #ffd7e5; border-radius:999px; padding:5px 10px; font-size:11px; font-weight:900; display:inline-block; }
+    .status-pill {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:88px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:2px solid transparent;
+      font-size:12px;
+      font-weight:900;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .status-waiting {
+      background:#fff4ea;
+      color:#d89a4d;
+      border-color:#ffe0b8;
+    }
+    .status-serving {
+      background:#fff0f6;
+      color:#d86d8c;
+      border-color:#f7c4d4;
+    }
+    .status-done {
+      background:#eefbf1;
+      color:#52a76f;
+      border-color:#c8ecd2;
+    }
+    .task-actions {
+      margin-top:4px;
+      display:flex;
+      gap:6px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    .task-action-btn {
+      border:none;
+      border-radius:999px;
+      padding:8px 10px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow: var(--shadow);
+    }
+    .task-action-btn.serving {
+      background:#fff3f7;
+      color:#d98ea5;
+      border:1px solid #f5cada;
+    }
+    .task-action-btn.done {
+      background:#f4fff6;
+      color:#6eb78a;
+      border:1px solid #caebd3;
+    }
+    .task-action-btn.delete {
+      background:#fff;
+      color:#d9a0b1;
+      border:1px solid #f1d6df;
+    }
     .calendar {
       margin-top: 14px;
       background: rgba(255,255,255,0.85);
@@ -158,10 +243,47 @@
     .credit-text { font-size: 13px; margin-top: 6px; line-height: 1.6; white-space: pre-wrap; }
     .credit-meta { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top: 10px; }
     .credit-date { font-size: 11px; color: var(--text-soft); }
-    .bottom-nav { position: sticky; bottom: 0; margin-top: 16px; display:flex; justify-content:center; }
+    .view-tabs { display:grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+    .view-tab {
+      border:none;
+      border-radius:999px;
+      padding:10px 8px;
+      font-weight:900;
+      color:var(--text-soft);
+      background:rgba(255,255,255,0.92);
+      box-shadow: var(--shadow);
+      cursor:pointer;
+    }
+    .view-tab.active { background: linear-gradient(180deg, #ffeef4, #ffdce7); color: var(--pink-2); }
+    .done-summary { display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
+    .done-box {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,246,250,0.92));
+      border: 2px solid rgba(255,255,255,0.98);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      text-align:center;
+    }
+    .done-num { font-size: 34px; font-weight: 900; color: var(--pink-2); line-height: 1; }
+    .done-label { font-size: 12px; color: var(--text-soft); margin-top: 6px; }
+    .done-list { display:flex; flex-direction:column; gap: 10px; }
+    .done-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,246,250,0.92));
+      border: 2px solid rgba(255,255,255,0.98);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 12px;
+    }
+    .done-name { font-size: 15px; font-weight: 900; color: var(--pink-2); }
+    .done-right { text-align:right; }
+    .bottom-nav { position: sticky; bottom: 0; margin-top: 16px; display:flex; justify-content:center; z-index: 2; }
     .navbox {
-      background: rgba(255,255,255,0.92);
-      border: 2px solid rgba(255,255,255,0.95);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,244,249,0.95));
+      border: 2px solid rgba(255,255,255,0.98);
       border-radius: 999px;
       display:flex;
       align-items:center;
@@ -175,8 +297,8 @@
       width: 58px;
       height: 58px;
       border-radius: 50%;
-      border: 4px solid rgba(255,255,255,0.95);
-      background: linear-gradient(180deg, var(--pink), var(--pink-2));
+      border: 4px solid rgba(255,255,255,0.98);
+      background: linear-gradient(180deg, #ffbfd5, #f58eb1);
       color:white;
       display:grid;
       place-items:center;
@@ -184,7 +306,7 @@
       font-weight: 300;
       margin-top: -28px;
       cursor: pointer;
-      box-shadow: var(--shadow);
+      box-shadow: 0 14px 28px rgba(245,142,177,0.28);
     }
     .side { display:flex; flex-direction:column; gap: 16px; }
     .side .card { padding: 18px; }
@@ -225,7 +347,7 @@
       padding: 14px;
       font-weight: 900;
       cursor: pointer;
-      background: linear-gradient(180deg, var(--pink), var(--pink-2));
+      background: linear-gradient(180deg, #ffbfd5, #f58eb1);
       color: white;
       box-shadow: var(--shadow);
     }
@@ -233,6 +355,9 @@
     .mini-actions { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
     .toolbar { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .modebox { display:flex; gap: 10px; }
+    #modePanel { margin: 14px auto 0; width: min(360px, calc(100% - 8px)); text-align: center; padding: 12px; }
+    #modePanel .modebox { justify-content: center; }
+    #modePanel .pill { max-width: 160px; }
     .pill { flex:1; padding: 10px; border-radius: 999px; text-align:center; font-weight: 900; cursor: pointer; background: #fff; border: 1px solid var(--line); }
     .pill.active { background: linear-gradient(180deg, #ffeef4, #ffdce7); color: var(--pink-2); }
     .hidden { display:none !important; }
@@ -247,6 +372,27 @@
       cursor: pointer;
       box-shadow: var(--shadow);
     }
+    .sticker-decor {
+      position: fixed;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 10px 20px rgba(245,142,177,0.20));
+      opacity: 0.96;
+    }
+    .sticker-decor img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .sticker-1 { left: 4px; top: 88px; width: 82px; transform: rotate(-8deg); opacity: 0.9; }
+    .sticker-2 { left: 6px; top: 260px; width: 100px; transform: rotate(8deg); opacity: 0.9; }
+    .sticker-3 { left: 2px; top: 470px; width: 84px; transform: rotate(-10deg); opacity: 0.88; }
+    .sticker-4 { left: 8px; bottom: 120px; width: 96px; transform: rotate(10deg); opacity: 0.9; }
+    .sticker-5 { right: 4px; top: 96px; width: 86px; transform: rotate(8deg); opacity: 0.9; }
+    .sticker-6 { right: 6px; top: 270px; width: 100px; transform: rotate(-8deg); opacity: 0.9; }
+    .sticker-7 { right: 2px; top: 490px; width: 84px; transform: rotate(10deg); opacity: 0.88; }
+    .sticker-8 { right: 8px; bottom: 126px; width: 98px; transform: rotate(-9deg); opacity: 0.9; }
     .gate-backdrop {
       position: fixed;
       inset: 0;
@@ -277,16 +423,33 @@
       font-size: 14px;
       margin-bottom: 14px;
     }
+    .gate-pass-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
     .gate-input {
       width: 100%;
       border: 2px solid rgba(243,184,202,0.35);
       border-radius: 16px;
-      padding: 14px 16px;
+      padding: 14px 52px 14px 16px;
       outline: none;
       font-size: 16px;
       color: var(--text);
       background: #fff;
-      margin-bottom: 12px;
+      margin-bottom: 0;
+    }
+    .gate-eye {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: var(--pink-2);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 999px;
     }
     .gate-btn {
       width: 100%;
@@ -305,18 +468,43 @@
       margin-top: 10px;
     }
 
+
     @media (max-width: 980px) {
-      .layout { grid-template-columns: 1fr; }
+      body { display:block; }
+      .wrap { width: 100%; align-items: stretch; }
+      .layout { width: 100%; grid-template-columns: 1fr; gap: 18px; }
+      .layout > div:first-child { display:block; }
+      .side { max-width: 100%; }
       .phone { min-height: auto; }
+      #modePanel { width: 100%; max-width: 100%; }
+      #modePanel .pill { max-width: none; }
+      .sticker-1, .sticker-5 { width: 64px; top: 72px; }
+      .sticker-2, .sticker-6 { width: 76px; top: 240px; }
+      .sticker-3, .sticker-7 { display:none; }
+      .sticker-4, .sticker-8 { width: 80px; bottom: 90px; }
+      .sticker-1, .sticker-2, .sticker-4 { left: 4px; }
+      .sticker-5, .sticker-6, .sticker-8 { right: 4px; }
+      #listView, #creditView, #doneView { max-height: 360px; padding-right: 2px; }
     }
   </style>
 </head>
 <body>
+  <div class="sticker-decor sticker-1"><img src="hello_kitty_side.png" alt=""></div>
+  <div class="sticker-decor sticker-2"><img src="kuromi_side.png" alt=""></div>
+  <div class="sticker-decor sticker-3"><img src="my_melody_side.png" alt=""></div>
+  <div class="sticker-decor sticker-4"><img src="hello_kitty_side.png" alt=""></div>
+  <div class="sticker-decor sticker-5"><img src="my_melody_side.png" alt=""></div>
+  <div class="sticker-decor sticker-6"><img src="kuromi_side.png" alt=""></div>
+  <div class="sticker-decor sticker-7"><img src="hello_kitty_side.png" alt=""></div>
+  <div class="sticker-decor sticker-8"><img src="my_melody_side.png" alt=""></div>
   <div class="gate-backdrop" id="gate" style="display:none;">
     <div class="gate-card">
       <div class="gate-title">ล็อกหน้าแอดมิน</div>
       <div class="gate-text">ใส่รหัสผ่านก่อนเข้าแก้คิว รูปปก และเครดิตของร้าน</div>
+      <div class="gate-pass-wrap">
       <input id="adminPasswordInput" class="gate-input" type="password" placeholder="รหัสผ่านแอดมิน" autocomplete="current-password" />
+      <button id="toggleAdminPassword" class="gate-eye" type="button" aria-label="แสดงรหัสผ่าน">👁</button>
+      </div>
       <button id="loginBtn" class="gate-btn" type="button">เข้าสู่หน้าแอดมิน</button>
       <div class="gate-error" id="gateError"></div>
     </div>
@@ -333,7 +521,7 @@
               <div class="tiny">— CHECK Q</div>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
-              <div class="admin" id="modeLabel">ADMIN</div>
+              <div class="admin hidden" id="modeLabel">ADMIN</div>
               <button type="button" class="logout-btn" id="logoutBtn">ออก</button>
               <div class="avatar" id="avatar"></div>
             </div>
@@ -344,9 +532,9 @@
 
           <div class="grid2">
             <div class="card">
-              <div class="mini-title">Next Queue</div>
+              <div class="mini-title">คิวทั้งหมด</div>
               <div class="big-num" id="todayCount">0</div>
-              <div class="tiny" id="todayText">คิววันนี้</div>
+              <div class="tiny" id="todayText">รอคิว 0 • กำลังทำ 0</div>
             </div>
             <div class="card">
               <div class="mini-title">Current Queue</div>
@@ -373,7 +561,24 @@
 
           <div id="creditView" class="hidden">
             <div class="section-title">CREDIT / PORTFOLIO</div>
+            <div class="view-tabs">
+              <button type="button" class="view-tab active" id="creditTab1" onclick="setCreditPage('1')">เครดิต 1</button>
+              <button type="button" class="view-tab" id="creditTab2" onclick="setCreditPage('2')">เครดิต 2</button>
+              <button type="button" class="view-tab" id="creditTab3" onclick="setCreditPage('3')">เครดิต 3</button>
+              <button type="button" class="view-tab" id="doneTab" onclick="showView('done')">ลูกค้าเสร็จแล้ว</button>
+            </div>
             <div class="credit-list" id="creditList"></div>
+          </div>
+
+          <div id="doneView" class="hidden">
+            <div class="section-title">DONE CUSTOMER</div>
+            <div class="done-summary">
+              <div class="done-box">
+                <div class="done-num" id="doneQueueCount">0</div>
+                <div class="done-label">คิวที่เสร็จแล้ว</div>
+              </div>
+            </div>
+            <div class="done-list" id="doneList"></div>
           </div>
 
           <div class="bottom-nav">
@@ -381,28 +586,28 @@
               <button type="button" class="navbtn active" id="navHome">⌂</button>
               <button type="button" class="plus" id="navPlus">+</button>
               <button type="button" class="navbtn" id="navCal">☷</button>
+              <button type="button" class="navbtn" id="navDone">✓</button>
               <button type="button" class="navbtn" id="navCredit">★</button>
+            </div>
+          </div>
+
+          <div class="card" id="modePanel">
+            <div class="modebox">
+              <div class="pill active" id="adminPill" onclick="setMode('admin')">แอดมิน</div>
+              <div class="pill" id="guestPill" onclick="setMode('guest')">ผู้เยี่ยมชม</div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="side">
-        <div class="card">
-          <div class="modebox">
-            <div class="pill active" id="adminPill" onclick="setMode('admin')">แอดมิน</div>
-            <div class="pill" id="guestPill" onclick="setMode('guest')">ผู้เยี่ยมชม</div>
-          </div>
-          <div class="subtext">โหมดผู้เยี่ยมชมจะซ่อนปุ่มแก้ไข แต่ยังดูคิวและหน้าเครดิตได้</div>
-        </div>
-
         <div class="card hidden" id="adminPanel">
           <div class="form-title">เพิ่มคิวใหม่ ✨</div>
           <div class="toggle">
             <span>คิวด่วน 🔥</span>
             <button type="button" class="switch" id="urgentSwitch" aria-label="สลับคิวด่วน"></button>
           </div>
-          <div class="field"><input id="customerName" placeholder="ชื่อลูกค้า (ระบบจะแสดงเป็น เทส)" /></div>
+          <div class="field"><input id="customerName" placeholder="ชื่อลูกค้า" /></div>
           <div class="field"><input id="jobType" placeholder="ประเภทงาน" /></div>
           <div class="field"><input id="channel" placeholder="ช่องทาง" value="Facebook" /></div>
           <div class="field"><textarea id="detail" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)..."></textarea></div>
@@ -416,6 +621,13 @@
 
         <div class="card hidden" id="creditPanel">
           <div class="form-title" style="font-size:22px;">เพิ่มเครดิต / ผลงาน</div>
+          <div class="field">
+            <select id="creditPage">
+              <option value="1">หน้าเครดิต 1</option>
+              <option value="2">หน้าเครดิต 2</option>
+              <option value="3">หน้าเครดิต 3</option>
+            </select>
+          </div>
           <div class="field">
             <select id="creditType">
               <option value="ผลงาน">ผลงาน</option>
@@ -454,8 +666,9 @@
     const BRAND_KEY = 'ixging-branding-v2';
     const API_URL = 'https://script.google.com/macros/s/AKfycbxg5nQAJF4NxDB7hyfirthwDscghm_D40ZmvNShvB6qp48grUBz0pLHSwvabx5P9DUHGg/exec';
     const DEFAULT_AVATAR = 'https://media.discordapp.net/attachments/1314967941682561075/1484573877441925342/image.png?ex=69beb8aa&is=69bd672a&hm=258e7f9ddc4075b53de40764c81a5d4f5ae70fd866ca532f52327a07a610adab&=&format=webp&quality=lossless&width=378&height=350';
+    const DEFAULT_COVER = 'https://media.discordapp.net/attachments/1314967941682561075/1484585623061925909/b8d7056788ac539fcb980310ca89d204.png?ex=69bec39a&is=69bd721a&hm=434f3647e9926c1ac7f4785461e12b4a3a75e663445c999eb0b2f8a026a1c26b&=&format=webp&quality=lossless&width=169&height=350';
 
-    let state = JSON.parse(localStorage.getItem(KEY) || '{"mode":"guest","urgent":false,"queues":[],"credits":[],"view":"list"}');
+    let state = JSON.parse(localStorage.getItem(KEY) || '{"mode":"guest","urgent":false,"queues":[],"credits":[],"view":"list","creditPage":"1"}');
     let branding = JSON.parse(localStorage.getItem(BRAND_KEY) || JSON.stringify({ brand: 'Ixging ʚìɞ', avatar: DEFAULT_AVATAR, cover: '' }));
     let pendingCreditImage = '';
     let pendingAvatarImage = '';
@@ -592,14 +805,27 @@
       }
     }
 
+    function parseDateValue(value) {
+      if (!value) return null;
+      if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))) {
+        const d = new Date(String(value) + 'T00:00:00');
+        return isNaN(d.getTime()) ? null : d;
+      }
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
     function formatDateThai(dateStr) {
-      if (!dateStr) return '-';
-      const d = new Date(dateStr + 'T00:00:00');
+      const d = parseDateValue(dateStr);
+      if (!d) return '-';
       return d.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit', year:'2-digit' });
     }
 
     function formatDateTime(ts) {
-      return new Date(ts).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
+      const d = parseDateValue(ts);
+      if (!d) return '-';
+      return d.toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
     }
 
     function todayISO() {
@@ -626,10 +852,16 @@
     }
 
     async function addQueue() {
+      const customer = document.getElementById('customerName').value.trim();
       const jobType = document.getElementById('jobType').value.trim();
       const channel = document.getElementById('channel').value.trim() || 'Facebook';
       const detail = document.getElementById('detail').value.trim();
       const deadline = document.getElementById('deadline').value || todayISO();
+
+      if (!customer) {
+        alert('กรอกชื่อลูกค้าก่อนนะ');
+        return;
+      }
 
       if (!jobType) {
         alert('กรอกประเภทงานก่อนนะ');
@@ -639,7 +871,7 @@
       const result = await apiPost({
         action: 'addQueue',
         id: Date.now(),
-        customer: 'เทส',
+        customer,
         jobType,
         channel,
         detail,
@@ -662,8 +894,21 @@
       await loadFromServer();
     }
 
+    function getCreditPageValue(item) {
+      if (item && item.page) return String(item.page);
+      const rawType = String((item && item.type) || '');
+      const match = rawType.match(/@@([123])$/);
+      return match ? match[1] : '1';
+    }
+
+    function getCreditTypeLabel(item) {
+      return String((item && item.type) || 'เครดิต').replace(/@@[123]$/, '');
+    }
+
     async function addCredit() {
-      const type = document.getElementById('creditType').value;
+      const page = document.getElementById('creditPage').value || '1';
+      const rawType = document.getElementById('creditType').value;
+      const type = `${rawType}@@${page}`;
       const title = document.getElementById('creditTitle').value.trim();
       const imageLink = document.getElementById('creditImage').value.trim();
       const text = document.getElementById('creditText').value.trim();
@@ -678,7 +923,8 @@
         action: 'addCredit',
         id: Date.now(),
         type,
-        title: title || type,
+        page,
+        title: title || rawType,
         image,
         text
       });
@@ -693,6 +939,7 @@
       document.getElementById('creditImageFile').value = '';
       document.getElementById('creditText').value = '';
       pendingCreditImage = '';
+      state.creditPage = page;
       await loadFromServer();
       showView('credit');
     }
@@ -732,16 +979,31 @@
       document.getElementById('creditPanel').classList.toggle('hidden');
     }
 
+    function setCreditPage(page) {
+      state.creditPage = String(page || '1');
+      if (state.view !== 'credit') state.view = 'credit';
+      saveState();
+      renderCredits();
+      applyView(state.view);
+    }
+
     function applyView(type) {
       const list = document.getElementById('listSection');
       const cal = document.getElementById('calendarView');
       const credit = document.getElementById('creditView');
+      const done = document.getElementById('doneView');
       document.getElementById('navHome').classList.toggle('active', type === 'list');
       document.getElementById('navCal').classList.toggle('active', type === 'calendar');
+      document.getElementById('navDone').classList.toggle('active', type === 'done');
       document.getElementById('navCredit').classList.toggle('active', type === 'credit');
+      document.getElementById('doneTab').classList.toggle('active', type === 'done');
+      document.getElementById('creditTab1').classList.toggle('active', type === 'credit' && String(state.creditPage || '1') === '1');
+      document.getElementById('creditTab2').classList.toggle('active', type === 'credit' && String(state.creditPage || '1') === '2');
+      document.getElementById('creditTab3').classList.toggle('active', type === 'credit' && String(state.creditPage || '1') === '3');
       list.classList.toggle('hidden', type !== 'list');
       cal.classList.toggle('hidden', type !== 'calendar');
       credit.classList.toggle('hidden', type !== 'credit');
+      done.classList.toggle('hidden', type !== 'done');
     }
 
     function showView(type) {
@@ -788,7 +1050,7 @@
           .filter(q => q.status !== 'done')
           .map(q => q.deadline)
           .filter(Boolean)
-          .filter(d => new Date(d + 'T00:00:00').getMonth() === m)
+          .filter(d => parseDateValue(d) && parseDateValue(d).getMonth() === m)
       );
       return Math.max(0, daysInMonth - booked.size);
     }
@@ -807,7 +1069,7 @@
           .filter(q => q.status !== 'done')
           .map(q => q.deadline)
           .filter(Boolean)
-          .filter(d => new Date(d + 'T00:00:00').getMonth() === m)
+          .filter(d => parseDateValue(d) && parseDateValue(d).getMonth() === m)
           .map(d => new Date(d + 'T00:00:00').getDate())
       );
 
@@ -852,14 +1114,14 @@
 
     async function loadDemoData() {
       const demoQueues = [
-        { id: Date.now() + 1, customer: 'เทส', jobType: 'ป้ายแอพพ์', channel: 'Facebook', detail: '20 เรฟ', deadline: todayISO(), urgent: false, status: 'serving' },
-        { id: Date.now() + 2, customer: 'เทส', jobType: 'Commission', channel: 'Discord', detail: '1 ตัวละคร', deadline: todayISO(), urgent: true, status: 'waiting' },
-        { id: Date.now() + 3, customer: 'เทส', jobType: 'Banner', channel: 'Line', detail: 'โทนชมพู', deadline: addDays(2), urgent: false, status: 'waiting' }
+        { id: Date.now() + 1, customer: 'ลูกค้า A', jobType: 'ป้ายแอพพ์', channel: 'Facebook', detail: '20 เรฟ', deadline: todayISO(), urgent: false, status: 'serving' },
+        { id: Date.now() + 2, customer: 'ลูกค้า B', jobType: 'Commission', channel: 'Discord', detail: '1 ตัวละคร', deadline: todayISO(), urgent: true, status: 'waiting' },
+        { id: Date.now() + 3, customer: 'ลูกค้า C', jobType: 'Banner', channel: 'Line', detail: 'โทนชมพู', deadline: addDays(2), urgent: false, status: 'waiting' }
       ];
 
       const demoCredits = [
-        { id: Date.now() + 11, type: 'ผลงาน', title: 'ตัวอย่างงานล่าสุด', image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop', text: 'ตัวอย่างข้อความอธิบายผลงาน ใส่รายละเอียดงานหรือรีวิวสั้น ๆ ได้' },
-        { id: Date.now() + 12, type: 'สลิป', title: 'ตัวอย่างสลิปยืนยัน', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1200&auto=format&fit=crop', text: 'ใช้โชว์หลักฐานการโอนหรือเครดิตจากลูกค้า' }
+        { id: Date.now() + 11, type: 'ผลงาน', page: '1', title: 'ตัวอย่างงานล่าสุด', image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop', text: 'ตัวอย่างข้อความอธิบายผลงาน ใส่รายละเอียดงานหรือรีวิวสั้น ๆ ได้' },
+        { id: Date.now() + 12, type: 'สลิป', page: '2', title: 'ตัวอย่างสลิปยืนยัน', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1200&auto=format&fit=crop', text: 'ใช้โชว์หลักฐานการโอนหรือเครดิตจากลูกค้า' }
       ];
 
       await apiPost({ action: 'saveSettings', settings: { brand: 'Ixging ʚìɞ', avatar: branding.avatar || '', cover: branding.cover || '' } });
@@ -884,14 +1146,42 @@
       alert('เวอร์ชันนี้เชื่อม Google Sheet แล้ว ถ้าจะรีเซ็ตให้ลบข้อมูลในชีต queues / credits / settings โดยตรง');
     }
 
+    function getDoneQueues() {
+      return [...state.queues].filter(q => q.status === 'done');
+    }
+
+    function renderDoneCustomers() {
+      const doneQueues = getDoneQueues().sort((a, b) => (parseDateValue(b.deadline)?.getTime() || 0) - (parseDateValue(a.deadline)?.getTime() || 0));
+      document.getElementById('doneQueueCount').textContent = doneQueues.length;
+      const doneList = document.getElementById('doneList');
+      if (!doneQueues.length) {
+        doneList.innerHTML = '<div class="card" style="text-align:center; color:var(--text-soft);">ยังไม่มีงานที่เสร็จแล้ว</div>';
+        return;
+      }
+      doneList.innerHTML = doneQueues.map(q => `<div class="done-card">
+        <div>
+          <div class="done-name">${q.customer || '-'}</div>
+          <div class="task-meta">${q.jobType || '-'}</div>
+          <div class="task-meta">${q.detail || '-'}</div>
+        </div>
+        <div class="done-right">
+          <div class="tag">${q.channel || '-'}</div>
+          <div class="task-meta" style="margin-top:6px;">📅 ${formatDateThai(q.deadline)}</div>
+          <div class="status-pill status-done" style="margin-top:6px;">เสร็จแล้ว</div>
+        </div>
+      </div>`).join('');
+    }
+
     function renderCredits() {
       const creditList = document.getElementById('creditList');
-      if (!state.credits.length) {
+      const page = String(state.creditPage || '1');
+      const filteredCredits = state.credits.filter(item => getCreditPageValue(item) === page);
+      if (!filteredCredits.length) {
         creditList.innerHTML = '<div class="card" style="text-align:center; color:var(--text-soft);">ยังไม่มีเครดิต ลองเพิ่มรูปผลงาน สลิป หรือข้อความรีวิว 💖</div>';
         return;
       }
 
-      creditList.innerHTML = state.credits.map(item => {
+      creditList.innerHTML = filteredCredits.map(item => {
         const delBtn = state.mode === 'admin'
           ? `<button onclick="removeCredit(${item.id})" style="border:none;border-radius:999px;padding:7px 10px;background:#fff;color:#d9a0b1;font-weight:800;cursor:pointer;">ลบ</button>`
           : '';
@@ -907,7 +1197,7 @@
             <div class="credit-text">${item.text || '-'}</div>
             <div class="credit-meta">
               <div>
-                <span class="tag">${item.type}</span>
+                <span class="tag">${getCreditTypeLabel(item)}</span>
                 <div class="credit-date">${formatDateTime(item.createdAt)}</div>
               </div>
               ${delBtn}
@@ -921,8 +1211,9 @@
       document.getElementById('urgentSwitch').classList.toggle('on', !!state.urgent);
       document.getElementById('adminPill').classList.toggle('active', state.mode === 'admin');
       document.getElementById('guestPill').classList.toggle('active', state.mode === 'guest');
-      document.getElementById('modeLabel').textContent = 'ADMIN';
+      document.getElementById('modeLabel').classList.add('hidden');
       document.getElementById('logoutBtn').style.display = state.mode === 'admin' ? 'inline-flex' : 'none';
+      document.getElementById('navPlus').style.display = state.mode === 'admin' ? 'inline-flex' : 'none';
       document.getElementById('adminPanel').classList.toggle('hidden', state.mode !== 'admin');
       document.getElementById('creditPanel').classList.toggle('hidden', state.mode !== 'admin');
       document.getElementById('brandingPanel').classList.toggle('hidden', state.mode !== 'admin');
@@ -933,30 +1224,31 @@
       document.getElementById('coverInput').value = branding.cover || '';
 
       document.getElementById('avatar').style.backgroundImage = `url('${DEFAULT_AVATAR}')`;
-      if (branding.cover) {
-        document.getElementById('hero').style.backgroundImage = `url('${branding.cover}')`;
-      } else {
-        document.getElementById('hero').style.backgroundImage = 'none';
-      }
+      document.getElementById('hero').style.backgroundImage = branding.cover ? `url('${branding.cover}')` : 'linear-gradient(180deg, rgba(255,248,252,0.96), rgba(255,229,239,0.92))';
 
       const current = getCurrentQueue();
-      const todayQueues = getTodayQueues();
-      document.getElementById('todayCount').textContent = todayQueues.length;
-      document.getElementById('todayText').textContent = todayQueues.length ? 'คิววันนี้' : 'วันนี้ว่าง';
-      document.getElementById('currentQueue').textContent = current ? current.customer : '-';
+      document.getElementById('currentQueue').textContent = current ? `คิว ${current.customer}` : '-';
       document.getElementById('currentName').textContent = current ? `${current.jobType} • ${current.channel}` : 'ยังไม่มีคิว';
 
-      const sorted = [...state.queues].sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+      const sorted = [...state.queues]
+        .filter(q => q.status !== 'done')
+        .sort((a, b) => (parseDateValue(a.deadline)?.getTime() || 0) - (parseDateValue(b.deadline)?.getTime() || 0));
+      const waitingCount = sorted.filter(q => q.status === 'waiting').length;
+      const servingCount = sorted.filter(q => q.status === 'serving').length;
+      document.getElementById('todayCount').textContent = sorted.length;
+      document.getElementById('todayText').textContent = `รอคิว ${waitingCount} • กำลังทำ ${servingCount}`;
       const taskList = document.getElementById('taskList');
       if (!sorted.length) {
-        taskList.innerHTML = '<div class="card" style="text-align:center; color:var(--text-soft);">ยังไม่มีคิว ลองกด “ใส่ข้อมูลตัวอย่าง” หรือเพิ่มคิวใหม่ 💖</div>';
+        taskList.innerHTML = '<div class="card" style="text-align:center; color:var(--text-soft);">ไม่มีคิวที่กำลังรอหรือกำลังทำอยู่ตอนนี้ 💖</div>';
       } else {
         taskList.innerHTML = sorted.map(q => {
+          const statusClass = q.status === 'done' ? 'status-done' : q.status === 'serving' ? 'status-serving' : 'status-waiting';
+          const statusText = q.status === 'done' ? 'เสร็จแล้ว' : q.status === 'serving' ? 'กำลังทำ' : 'รอคิว';
           const adminActions = state.mode === 'admin'
-            ? `<div style="margin-top:8px; display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
-                <button onclick="setStatus(${q.id}, 'serving')" style="border:none;border-radius:999px;padding:6px 8px;background:#fff3f7;color:#d98ea5;font-weight:800;cursor:pointer;">กำลังทำ</button>
-                <button onclick="setStatus(${q.id}, 'done')" style="border:none;border-radius:999px;padding:6px 8px;background:#f4fff6;color:#6eb78a;font-weight:800;cursor:pointer;">เสร็จ</button>
-                <button onclick="removeQueue(${q.id})" style="border:none;border-radius:999px;padding:6px 8px;background:#fff;color:#d9a0b1;font-weight:800;cursor:pointer;">ลบ</button>
+            ? `<div class="task-actions">
+                <button onclick="setStatus(${q.id}, 'serving')" class="task-action-btn serving">กำลังทำ</button>
+                <button onclick="setStatus(${q.id}, 'done')" class="task-action-btn done">เสร็จ</button>
+                <button onclick="removeQueue(${q.id})" class="task-action-btn delete">ลบ</button>
               </div>`
             : '';
 
@@ -969,8 +1261,8 @@
             </div>
             <div class="task-right">
               <div class="tag">${q.channel}</div>
-              <div class="task-meta" style="margin-top:6px;">📅 ${formatDateThai(q.deadline)}</div>
-              <div class="task-meta">${q.status === 'done' ? 'เสร็จแล้ว' : q.status === 'serving' ? 'กำลังทำ' : 'รอคิว'}</div>
+              <div class="task-meta">📅 ${formatDateThai(q.deadline)}</div>
+              <div class="status-pill ${statusClass}">${statusText}</div>
               ${adminActions}
             </div>
           </div>`;
@@ -979,6 +1271,7 @@
 
       renderCalendar();
       renderCredits();
+      renderDoneCustomers();
       applyView(state.view || 'list');
     }
 
@@ -986,9 +1279,18 @@
       document.getElementById('urgentSwitch').addEventListener('click', toggleUrgent);
       document.getElementById('navHome').addEventListener('click', () => showView('list'));
       document.getElementById('navCal').addEventListener('click', () => showView('calendar'));
+      document.getElementById('navDone').addEventListener('click', () => showView('done'));
       document.getElementById('navCredit').addEventListener('click', () => showView('credit'));
       document.getElementById('navPlus').addEventListener('click', toggleAdminPanel);
       document.getElementById('loginBtn').addEventListener('click', submitAdminPassword);
+      document.getElementById('toggleAdminPassword').addEventListener('click', () => {
+        const input = document.getElementById('adminPasswordInput');
+        const btn = document.getElementById('toggleAdminPassword');
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        btn.textContent = isHidden ? '🙈' : '👁';
+        btn.setAttribute('aria-label', isHidden ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน');
+      });
       document.getElementById('adminPasswordInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') submitAdminPassword();
       });
