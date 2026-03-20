@@ -762,6 +762,9 @@
 
     setupEvents();
     loadFromServer();
+    setInterval(() => {
+      if (!document.hidden) loadFromServer();
+    }, 30000);
   </script>
 </body>
 </html>
