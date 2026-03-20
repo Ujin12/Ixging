@@ -246,6 +246,75 @@
     .pill { flex:1; padding: 10px; border-radius: 999px; text-align:center; font-weight: 900; cursor: pointer; background: #fff; border: 1px solid var(--line); }
     .pill.active { background: linear-gradient(180deg, #ffeef4, #ffdce7); color: var(--pink-2); }
     .hidden { display:none !important; }
+
+    .logout-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--pink-2);
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    .gate-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 240, 246, 0.78);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 9999;
+    }
+    .gate-card {
+      width: min(420px, 100%);
+      background: rgba(255,255,255,0.96);
+      border: 2px solid rgba(255,255,255,0.95);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .gate-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--pink-2);
+      margin-bottom: 8px;
+    }
+    .gate-text {
+      color: var(--text-soft);
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .gate-input {
+      width: 100%;
+      border: 2px solid rgba(243,184,202,0.35);
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+      font-size: 16px;
+      color: var(--text);
+      background: #fff;
+      margin-bottom: 12px;
+    }
+    .gate-btn {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, var(--pink), var(--pink-2));
+      color: white;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .gate-error {
+      min-height: 20px;
+      color: #d86d8c;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
     @media (max-width: 980px) {
       .layout { grid-template-columns: 1fr; }
       .phone { min-height: auto; }
@@ -253,7 +322,16 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="gate-backdrop" id="gate">
+    <div class="gate-card">
+      <div class="gate-title">ล็อกหน้าแอดมิน</div>
+      <div class="gate-text">ใส่รหัสผ่านก่อนเข้าแก้คิว รูปปก และเครดิตของร้าน</div>
+      <input id="adminPasswordInput" class="gate-input" type="password" placeholder="รหัสผ่านแอดมิน" autocomplete="current-password" />
+      <button id="loginBtn" class="gate-btn" type="button">เข้าสู่หน้าแอดมิน</button>
+      <div class="gate-error" id="gateError"></div>
+    </div>
+  </div>
+  <div class="wrap" id="appWrap" style="display:none;">
     <div class="notice">📱 เว็บแอพจัดการคิว + หน้าเครดิตผลงาน • Ixging</div>
     <div class="layout">
       <div>
@@ -266,6 +344,7 @@
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
               <div class="admin" id="modeLabel">ADMIN</div>
+              <button type="button" class="logout-btn" id="logoutBtn">ออก</button>
               <div class="avatar" id="avatar"></div>
             </div>
           </div>
@@ -390,6 +469,8 @@
     let pendingCreditImage = '';
     let pendingAvatarImage = '';
     let pendingCoverImage = '';
+    let adminPassword = sessionStorage.getItem('ixging-admin-password') || '';
+    let adminUnlocked = false;
 
     function saveState() {
       localStorage.setItem(KEY, JSON.stringify(state));
@@ -402,12 +483,19 @@
     }
 
     async function apiPost(payload) {
+      const body = { ...payload, password: payload.password || adminPassword || '' };
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(body)
       });
-      return await res.json();
+      const data = await res.json();
+      if (data && data.message === 'UNAUTHORIZED') {
+        adminUnlocked = false;
+        sessionStorage.removeItem('ixging-admin-password');
+        showGate('รหัสผ่านหมดอายุหรือไม่ถูกต้อง');
+      }
+      return data;
     }
 
     function toBool(value) {
@@ -416,6 +504,63 @@
         return value.toLowerCase() === 'true';
       }
       return !!value;
+    }
+
+    function showGate(message = '') {
+      const gate = document.getElementById('gate');
+      const wrap = document.getElementById('appWrap');
+      const error = document.getElementById('gateError');
+      if (gate) gate.style.display = 'flex';
+      if (wrap) wrap.style.display = 'none';
+      if (error) error.textContent = message;
+    }
+
+    function unlockAdmin() {
+      adminUnlocked = true;
+      const gate = document.getElementById('gate');
+      const wrap = document.getElementById('appWrap');
+      const error = document.getElementById('gateError');
+      if (gate) gate.style.display = 'none';
+      if (wrap) wrap.style.display = 'block';
+      if (error) error.textContent = '';
+    }
+
+    async function verifyPassword(password) {
+      const result = await apiPost({ action: 'authCheck', password });
+      if (result && result.ok) {
+        adminPassword = password;
+        sessionStorage.setItem('ixging-admin-password', password);
+        unlockAdmin();
+        await loadFromServer();
+        return true;
+      }
+      showGate('รหัสผ่านไม่ถูกต้อง');
+      return false;
+    }
+
+    async function submitAdminPassword() {
+      const input = document.getElementById('adminPasswordInput');
+      const password = (input && input.value || '').trim();
+      if (!password) {
+        showGate('กรอกรหัสผ่านก่อน');
+        return;
+      }
+      await verifyPassword(password);
+    }
+
+    function logoutAdmin() {
+      adminUnlocked = false;
+      adminPassword = '';
+      sessionStorage.removeItem('ixging-admin-password');
+      showGate('ออกจากหน้าแอดมินแล้ว');
+    }
+
+    async function initAdminGate() {
+      if (adminPassword) {
+        const ok = await verifyPassword(adminPassword);
+        if (ok) return;
+      }
+      showGate('');
     }
 
     async function loadFromServer() {
@@ -774,9 +919,13 @@
 
       if (branding.avatar) {
         document.getElementById('avatar').style.backgroundImage = `url('${branding.avatar}')`;
+      } else {
+        document.getElementById('avatar').style.backgroundImage = 'none';
       }
       if (branding.cover) {
         document.getElementById('hero').style.backgroundImage = `url('${branding.cover}')`;
+      } else {
+        document.getElementById('hero').style.backgroundImage = 'none';
       }
 
       const current = getCurrentQueue();
@@ -828,6 +977,11 @@
       document.getElementById('navCal').addEventListener('click', () => showView('calendar'));
       document.getElementById('navCredit').addEventListener('click', () => showView('credit'));
       document.getElementById('navPlus').addEventListener('click', toggleAdminPanel);
+      document.getElementById('loginBtn').addEventListener('click', submitAdminPassword);
+      document.getElementById('adminPasswordInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitAdminPassword();
+      });
+      document.getElementById('logoutBtn').addEventListener('click', logoutAdmin);
 
       document.getElementById('creditImageFile').addEventListener('change', function (event) {
         const file = event.target.files && event.target.files[0];
@@ -872,7 +1026,7 @@
     }
 
     setupEvents();
-    loadFromServer();
+    initAdminGate();
   </script>
 </body>
 </html>
