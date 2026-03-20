@@ -27,7 +27,7 @@
       min-height: 100vh;
       padding: 14px;
     }
-    .wrap { max-width: 1180px; margin: 0 auto; }
+    .wrap { max-width: 760px; margin: 0 auto; }
     .notice {
       background: rgba(255,255,255,0.7);
       border: 2px solid rgba(255,255,255,0.9);
@@ -41,8 +41,8 @@
     }
     .layout {
       display: grid;
-      grid-template-columns: 1.3fr 0.9fr;
-      gap: 18px;
+      grid-template-columns: 1fr;
+      gap: 24px;
       align-items: start;
     }
     .phone {
@@ -316,7 +316,6 @@
           <div class="bottom-nav">
             <div class="navbox">
               <button type="button" class="navbtn active" id="navHome">⌂</button>
-              <button type="button" class="plus" id="navPlus">+</button>
               <button type="button" class="navbtn" id="navCal">☷</button>
               <button type="button" class="navbtn" id="navCredit">★</button>
             </div>
@@ -324,65 +323,6 @@
         </div>
       </div>
 
-      <div class="side">
-        <div class="card">
-          <div class="modebox">
-            <div class="pill active" id="adminPill" onclick="setMode('admin')">แอดมิน</div>
-            <div class="pill" id="guestPill" onclick="setMode('guest')">ผู้เยี่ยมชม</div>
-          </div>
-          <div class="subtext">โหมดผู้เยี่ยมชมจะซ่อนปุ่มแก้ไข แต่ยังดูคิวและหน้าเครดิตได้</div>
-        </div>
-
-        <div class="card" id="adminPanel">
-          <div class="form-title">เพิ่มคิวใหม่ ✨</div>
-          <div class="toggle">
-            <span>คิวด่วน 🔥</span>
-            <button type="button" class="switch" id="urgentSwitch" aria-label="สลับคิวด่วน"></button>
-          </div>
-          <div class="field"><input id="customerName" placeholder="ชื่อลูกค้า (ระบบจะแสดงเป็น เทส)" /></div>
-          <div class="field"><input id="jobType" placeholder="ประเภทงาน" /></div>
-          <div class="field"><input id="channel" placeholder="ช่องทาง" value="Facebook" /></div>
-          <div class="field"><textarea id="detail" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)..."></textarea></div>
-          <div class="field"><input id="deadline" type="date" /></div>
-          <button class="btn" onclick="addQueue()">บันทึกคิวงาน</button>
-          <div class="mini-actions">
-            <button class="btn secondary" onclick="saveBackup()">สำรองข้อมูล</button>
-            <button class="btn secondary" onclick="resetData()">รีเซ็ต</button>
-          </div>
-        </div>
-
-        <div class="card" id="creditPanel">
-          <div class="form-title" style="font-size:22px;">เพิ่มเครดิต / ผลงาน</div>
-          <div class="field">
-            <select id="creditType">
-              <option value="ผลงาน">ผลงาน</option>
-              <option value="สลิป">สลิป</option>
-              <option value="เครดิต">เครดิต</option>
-            </select>
-          </div>
-          <div class="field"><input id="creditTitle" placeholder="หัวข้อ เช่น งานป้าย / สลิปโอน / รีวิวลูกค้า" /></div>
-          <div class="field"><input id="creditImage" placeholder="ลิงก์รูปภาพ (ถ้ามี)" /></div>
-          <div class="field"><input id="creditImageFile" type="file" accept="image/*" /></div>
-          <div class="tiny" style="margin-top:-4px; margin-bottom:10px;">อัปโหลดรูปจากเครื่องหรือโทรศัพท์ได้เลย</div>
-          <div class="field"><textarea id="creditText" placeholder="ข้อความอธิบาย หรือคำรีวิว"></textarea></div>
-          <button class="btn" onclick="addCredit()">เพิ่มเครดิต</button>
-        </div>
-
-        <div class="card">
-          <div class="form-title" style="font-size:20px;">ตั้งค่าเว็บ</div>
-          <div class="field"><input id="brandInput" placeholder="ชื่อแบรนด์" value="Ixging ʚìɞ" /></div>
-          <div class="field"><input id="avatarInput" placeholder="ลิงก์รูปโปรไฟล์ (ถ้ามี)" /></div>
-          <div class="field"><input id="avatarFile" type="file" accept="image/*" /></div>
-          <div class="tiny" style="margin-top:-4px; margin-bottom:10px;">อัปโหลดรูปโปรไฟล์จากเครื่องหรือโทรศัพท์ได้</div>
-          <div class="field"><input id="coverInput" placeholder="ลิงก์รูปปก (ถ้ามี)" /></div>
-          <div class="field"><input id="coverFile" type="file" accept="image/*" /></div>
-          <div class="tiny" style="margin-top:-4px; margin-bottom:10px;">อัปโหลดรูปปกร้านจากเครื่องหรือโทรศัพท์ได้</div>
-          <div class="toolbar">
-            <button class="btn secondary" onclick="applyBranding()">อัปเดตหน้าตา</button>
-            <button class="btn secondary" onclick="loadDemoData()">ใส่ข้อมูลตัวอย่าง</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -391,7 +331,7 @@
     const BRAND_KEY = 'ixging-branding-v2';
     const API_URL = 'https://script.google.com/macros/s/AKfycbxg5nQAJF4NxDB7hyfirthwDscghm_D40ZmvNShvB6qp48grUBz0pLHSwvabx5P9DUHGg/exec';
 
-    let state = JSON.parse(localStorage.getItem(KEY) || '{"mode":"admin","urgent":false,"queues":[],"credits":[],"view":"list"}');
+    let state = JSON.parse(localStorage.getItem(KEY) || '{"mode":"guest","urgent":false,"queues":[],"credits":[],"view":"list"}');
     let branding = JSON.parse(localStorage.getItem(BRAND_KEY) || '{"brand":"Ixging ʚìɞ","avatar":"","cover":""}');
     let pendingCreditImage = '';
     let pendingAvatarImage = '';
@@ -480,13 +420,11 @@
       return `${y}-${m}-${day}`;
     }
 
-    function toggleUrgent() {
-      state.urgent = !state.urgent;
-      document.getElementById('urgentSwitch').classList.toggle('on', state.urgent);
-      saveState();
-    }
+    function toggleUrgent() { return; }
 
-    async function addQueue() {
+    async function addQueue() { return; }
+
+    async function __hiddenAddQueue() {
       const jobType = document.getElementById('jobType').value.trim();
       const channel = document.getElementById('channel').value.trim() || 'Facebook';
       const detail = document.getElementById('detail').value.trim();
@@ -523,7 +461,9 @@
       await loadFromServer();
     }
 
-    async function addCredit() {
+    async function addCredit() { return; }
+
+    async function __hiddenAddCredit() {
       const type = document.getElementById('creditType').value;
       const title = document.getElementById('creditTitle').value.trim();
       const imageLink = document.getElementById('creditImage').value.trim();
@@ -558,7 +498,9 @@
       showView('credit');
     }
 
-    async function removeCredit(id) {
+    async function removeCredit(id) { return; }
+
+    async function __hiddenRemoveCredit(id) {
       if (!confirm('ลบรายการเครดิตนี้ใช่ไหม?')) return;
       const result = await apiPost({ action: 'deleteCredit', id });
       if (!result.ok) {
@@ -568,17 +510,9 @@
       await loadFromServer();
     }
 
-    function setMode(mode) {
-      state.mode = mode;
-      saveState();
-      render();
-    }
+    function setMode(mode) { return; }
 
-    function toggleAdminPanel() {
-      if (state.mode !== 'admin') return;
-      document.getElementById('adminPanel').classList.toggle('hidden');
-      document.getElementById('creditPanel').classList.toggle('hidden');
-    }
+    function toggleAdminPanel() { return; }
 
     function applyView(type) {
       const list = document.getElementById('listSection');
@@ -598,7 +532,9 @@
       applyView(type);
     }
 
-    async function setStatus(id, status) {
+    async function setStatus(id, status) { return; }
+
+    async function __hiddenSetStatus(id, status) {
       const result = await apiPost({ action: 'updateQueueStatus', id, status });
       if (!result.ok) {
         alert('อัปเดตสถานะไม่สำเร็จ');
@@ -607,7 +543,9 @@
       await loadFromServer();
     }
 
-    async function removeQueue(id) {
+    async function removeQueue(id) { return; }
+
+    async function __hiddenRemoveQueue(id) {
       if (!confirm('ลบคิวนี้ใช่ไหม?')) return;
       const result = await apiPost({ action: 'deleteQueue', id });
       if (!result.ok) {
@@ -673,7 +611,9 @@
       container.innerHTML = cells.join('');
     }
 
-    async function applyBranding() {
+    async function applyBranding() { return; }
+
+    async function __hiddenApplyBranding() {
       const brand = document.getElementById('brandInput').value.trim() || 'Ixging ʚìɞ';
       const avatar = pendingAvatarImage || document.getElementById('avatarInput').value.trim();
       const cover = pendingCoverImage || document.getElementById('coverInput').value.trim();
@@ -693,7 +633,9 @@
       await loadFromServer();
     }
 
-    async function loadDemoData() {
+    async function loadDemoData() { return; }
+
+    async function __hiddenLoadDemoData() {
       const demoQueues = [
         { id: Date.now() + 1, customer: 'เทส', jobType: 'ป้ายแอพพ์', channel: 'Facebook', detail: '20 เรฟ', deadline: todayISO(), urgent: false, status: 'serving' },
         { id: Date.now() + 2, customer: 'เทส', jobType: 'Commission', channel: 'Discord', detail: '1 ตัวละคร', deadline: todayISO(), urgent: true, status: 'waiting' },
@@ -715,17 +657,9 @@
       await loadFromServer();
     }
 
-    function saveBackup() {
-      const blob = new Blob([JSON.stringify({ state, branding }, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'ixging-queue-backup-v2.json';
-      a.click();
-    }
+    function saveBackup() { return; }
 
-    function resetData() {
-      alert('เวอร์ชันนี้เชื่อม Google Sheet แล้ว ถ้าจะรีเซ็ตให้ลบข้อมูลในชีต queues / credits / settings โดยตรง');
-    }
+    function resetData() { return; }
 
     function renderCredits() {
       const creditList = document.getElementById('creditList');
@@ -735,7 +669,7 @@
       }
 
       creditList.innerHTML = state.credits.map(item => {
-        const delBtn = state.mode === 'admin'
+        const delBtn = false && state.mode === 'admin'
           ? `<button onclick="removeCredit(${item.id})" style="border:none;border-radius:999px;padding:7px 10px;background:#fff;color:#d9a0b1;font-weight:800;cursor:pointer;">ลบ</button>`
           : '';
 
@@ -762,11 +696,8 @@
 
     function render() {
       document.getElementById('urgentSwitch').classList.toggle('on', !!state.urgent);
-      document.getElementById('adminPill').classList.toggle('active', state.mode === 'admin');
-      document.getElementById('guestPill').classList.toggle('active', state.mode === 'guest');
-      document.getElementById('modeLabel').textContent = state.mode === 'admin' ? 'ADMIN' : 'VISITOR';
-      document.getElementById('adminPanel').classList.toggle('hidden', state.mode !== 'admin');
-      document.getElementById('creditPanel').classList.toggle('hidden', state.mode !== 'admin');
+      state.mode = 'guest';
+      document.getElementById('modeLabel').textContent = 'VISITOR';
 
       document.getElementById('brandName').textContent = branding.brand || 'Ixging ʚìɞ';
       document.getElementById('brandInput').value = branding.brand || 'Ixging ʚìɞ';
@@ -793,7 +724,7 @@
         taskList.innerHTML = '<div class="card" style="text-align:center; color:var(--text-soft);">ยังไม่มีคิว ลองกด “ใส่ข้อมูลตัวอย่าง” หรือเพิ่มคิวใหม่ 💖</div>';
       } else {
         taskList.innerHTML = sorted.map(q => {
-          const adminActions = state.mode === 'admin'
+          const adminActions = false && state.mode === 'admin'
             ? `<div style="margin-top:8px; display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
                 <button onclick="setStatus(${q.id}, 'serving')" style="border:none;border-radius:999px;padding:6px 8px;background:#fff3f7;color:#d98ea5;font-weight:800;cursor:pointer;">กำลังทำ</button>
                 <button onclick="setStatus(${q.id}, 'done')" style="border:none;border-radius:999px;padding:6px 8px;background:#f4fff6;color:#6eb78a;font-weight:800;cursor:pointer;">เสร็จ</button>
@@ -824,52 +755,9 @@
     }
 
     function setupEvents() {
-      document.getElementById('urgentSwitch').addEventListener('click', toggleUrgent);
       document.getElementById('navHome').addEventListener('click', () => showView('list'));
       document.getElementById('navCal').addEventListener('click', () => showView('calendar'));
       document.getElementById('navCredit').addEventListener('click', () => showView('credit'));
-      document.getElementById('navPlus').addEventListener('click', toggleAdminPanel);
-
-      document.getElementById('creditImageFile').addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) {
-          pendingCreditImage = '';
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          pendingCreditImage = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-
-      document.getElementById('avatarFile').addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) {
-          pendingAvatarImage = '';
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          pendingAvatarImage = e.target.result;
-          document.getElementById('avatarInput').value = '';
-        };
-        reader.readAsDataURL(file);
-      });
-
-      document.getElementById('coverFile').addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) {
-          pendingCoverImage = '';
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          pendingCoverImage = e.target.result;
-          document.getElementById('coverInput').value = '';
-        };
-        reader.readAsDataURL(file);
-      });
     }
 
     setupEvents();
