@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ixging Queue App + Credit</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Itim&family=Mali:wght@400;500;600;700&display=swap');
     :root {
       --bg1: #fff8fc;
       --bg2: #ffeef5;
@@ -23,7 +24,7 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; }
     body {
-      font-family: "Segoe UI", Tahoma, sans-serif;
+      font-family: "Mali", "Itim", sans-serif;
       background:
         linear-gradient(180deg, rgba(255,248,252,0.88), rgba(255,239,246,0.90)),
         url('https://media.discordapp.net/attachments/1314967941682561075/1484585623061925909/b8d7056788ac539fcb980310ca89d204.png?ex=69bec39a&is=69bd721a&hm=434f3647e9926c1ac7f4785461e12b4a3a75e663445c999eb0b2f8a026a1c26b&=&format=webp&quality=lossless&width=169&height=350') center center / cover fixed no-repeat;
@@ -33,11 +34,12 @@
     }
     .wrap { width: min(100%, 1020px); margin: 0 auto; display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; }
     .notice {
+      width: min(100%, 560px);
       background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,245,249,0.96));
       border: 2px solid rgba(255,255,255,0.98);
       border-radius: 999px;
       padding: 10px 18px;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: var(--shadow);
@@ -48,16 +50,17 @@
       align-self: center;
     }
     .layout {
-      width: min(100%, 980px);
+      width: min(100%, 560px);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 560px 380px;
-      gap: 40px;
+      grid-template-columns: 1fr;
+      gap: 18px;
       align-items: start;
       justify-content: center;
     }
     .layout > div:first-child { display:flex; justify-content:center; }
-    .side { width: 100%; max-width: 380px; margin: 0 auto; }
+    #adminStack { margin-top: 12px; display:flex; flex-direction:column; gap:12px; }
+    #adminStack .card { width: 100%; }
     .phone {
       background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,246,250,0.96));
       border: 10px solid rgba(255,255,255,0.98);
@@ -84,21 +87,34 @@
       padding: 14px;
     }
     .hero {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,236,244,0.34)),
-        url('https://i.pinimg.com/1200x/54/13/14/541314188f2bef9cfd1a5b6b78e982ff.jpg');
-      background-size: cover;
-      background-position: center center;
       position: relative;
       overflow: hidden;
-      min-height: 220px;
+      padding: 0;
+      min-height: 0;
+      background: linear-gradient(180deg, rgba(255,248,252,0.96), rgba(255,229,239,0.92));
     }
-    .hero::after {
+    .hero.has-cover::after {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(180deg, rgba(255,248,252,0.08), rgba(255,232,241,0.26));
       pointer-events: none;
+    }
+    .hero-img {
+      width: 100%;
+      height: auto;
+      max-height: 460px;
+      display: block;
+      object-fit: contain;
+      background: #fff8fc;
+    }
+    .hero-empty {
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: var(--text-soft);
+      text-align: center;
     }
     .topbar {
       display: flex;
@@ -107,7 +123,7 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .brand { font-weight: 900; font-size: 28px; color: var(--pink-2); letter-spacing: 0.5px; text-shadow: 0 3px 10px rgba(245,142,177,0.15); }
+    .brand { font-family: "Itim", "Mali", sans-serif; font-weight: 400; font-size: 30px; color: var(--pink-2); letter-spacing: 0.5px; text-shadow: 0 3px 10px rgba(245,142,177,0.15); }
     .admin {
       background: #fff7fb;
       color: var(--text-soft);
@@ -128,8 +144,10 @@
     }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
     .mini-title { font-size: 11px; font-weight: 800; color: var(--text-soft); letter-spacing: 1px; text-transform: uppercase; }
-    .big-num { font-size: 54px; font-weight: 900; color: var(--pink-2); line-height: 1; margin: 8px 0; }
+    .big-num { font-size: 54px; font-weight: 700; color: var(--pink-2); line-height: 1; margin: 8px 0; }
     .tiny { font-size: 12px; color: var(--text-soft); }
+    .date-note { font-size: 12px; color: var(--text-soft); margin-top: 6px; }
+    input, textarea, select, button { font-family: inherit; }
     .section-title { margin: 14px 0 8px; font-weight: 900; letter-spacing: 2px; color: var(--text-soft); font-size: 12px; }
     .task-list, .credit-list { display: flex; flex-direction: column; gap: 10px; }
     #listView, #creditView, #doneView { max-height: 420px; overflow-y: auto; padding-right: 6px; }
@@ -268,17 +286,31 @@
     .done-label { font-size: 12px; color: var(--text-soft); margin-top: 6px; }
     .done-list { display:flex; flex-direction:column; gap: 10px; }
     .done-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,246,250,0.92));
-      border: 2px solid rgba(255,255,255,0.98);
+      background: linear-gradient(180deg, rgba(243,243,246,0.96), rgba(232,232,237,0.94));
+      border: 2px solid rgba(255,255,255,0.78);
       border-radius: 22px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 24px rgba(120,120,140,0.10);
       padding: 14px;
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
       gap: 12px;
+      opacity: 0.78;
+      filter: grayscale(0.35) saturate(0.55);
     }
-    .done-name { font-size: 15px; font-weight: 900; color: var(--pink-2); }
+    .done-card .tag {
+      background:#f1f1f4;
+      color:#8d8d99;
+      border:1px solid #ddddE5;
+    }
+    .done-card .task-meta { color:#9d9daa; }
+    .done-card .status-pill.status-done {
+      background:#e6e6eb;
+      color:#8e8e99;
+      border-color:#d6d6df;
+      box-shadow:none;
+    }
+    .done-name { font-size: 15px; font-weight: 900; color: #8b8b98; text-decoration: line-through; text-decoration-thickness: 1.5px; }
     .done-right { text-align:right; }
     .bottom-nav { position: sticky; bottom: 0; margin-top: 16px; display:flex; justify-content:center; z-index: 2; }
     .navbox {
@@ -474,10 +506,11 @@
       .wrap { width: 100%; align-items: stretch; }
       .layout { width: 100%; grid-template-columns: 1fr; gap: 18px; }
       .layout > div:first-child { display:block; }
-      .side { max-width: 100%; }
       .phone { min-height: auto; }
+      .notice { width: 100%; }
       #modePanel { width: 100%; max-width: 100%; }
       #modePanel .pill { max-width: none; }
+      #adminStack { gap: 10px; }
       .sticker-1, .sticker-5 { width: 64px; top: 72px; }
       .sticker-2, .sticker-6 { width: 76px; top: 240px; }
       .sticker-3, .sticker-7 { display:none; }
@@ -510,7 +543,7 @@
     </div>
   </div>
   <div class="wrap" id="appWrap">
-    <div class="notice">📱 เว็บแอพจัดการคิว + หน้าเครดิตผลงาน • Ixging</div>
+    <div class="notice">🎀 เว็บแอพจัดการคิว + หน้าเครดิตผลงาน • Ixging 🎀</div>
     <div class="layout">
       <div>
         <div class="phone">
@@ -522,12 +555,13 @@
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
               <div class="admin hidden" id="modeLabel">ADMIN</div>
-              <button type="button" class="logout-btn" id="logoutBtn">ออก</button>
+              <button type="button" class="logout-btn" id="logoutBtn" aria-label="ออกจากระบบ" title="ออกจากระบบ">⎋</button>
               <div class="avatar" id="avatar"></div>
             </div>
           </div>
 
-          <div class="hero card" id="hero" style="background-image:url(''); background-size:cover; background-position:center center;">
+          <div class="hero card" id="hero">
+            <div class="hero-empty">เพิ่มรูปปกร้านได้จากเมนูตั้งค่าเว็บ</div>
           </div>
 
           <div class="grid2">
@@ -535,6 +569,7 @@
               <div class="mini-title">คิวทั้งหมด</div>
               <div class="big-num" id="todayCount">0</div>
               <div class="tiny" id="todayText">รอคิว 0 • กำลังทำ 0</div>
+              <div class="date-note" id="todayDate">วันที่ -</div>
             </div>
             <div class="card">
               <div class="mini-title">Current Queue</div>
@@ -597,10 +632,8 @@
               <div class="pill" id="guestPill" onclick="setMode('guest')">ผู้เยี่ยมชม</div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="side">
+          <div id="adminStack">
         <div class="card hidden" id="adminPanel">
           <div class="form-title">เพิ่มคิวใหม่ ✨</div>
           <div class="toggle">
@@ -618,8 +651,11 @@
             <button class="btn secondary" onclick="resetData()">รีเซ็ต</button>
           </div>
         </div>
+          </div>
+        </div>
+      </div>
 
-        <div class="card hidden" id="creditPanel">
+              <div class="card hidden" id="creditPanel">
           <div class="form-title" style="font-size:22px;">เพิ่มเครดิต / ผลงาน</div>
           <div class="field">
             <select id="creditPage">
@@ -665,7 +701,7 @@
     const KEY = 'ixging-queue-app-v2';
     const BRAND_KEY = 'ixging-branding-v2';
     const API_URL = 'https://script.google.com/macros/s/AKfycbxg5nQAJF4NxDB7hyfirthwDscghm_D40ZmvNShvB6qp48grUBz0pLHSwvabx5P9DUHGg/exec';
-    const DEFAULT_AVATAR = 'https://media.discordapp.net/attachments/1314967941682561075/1484573877441925342/image.png?ex=69beb8aa&is=69bd672a&hm=258e7f9ddc4075b53de40764c81a5d4f5ae70fd866ca532f52327a07a610adab&=&format=webp&quality=lossless&width=378&height=350';
+    const DEFAULT_AVATAR = 'https://media.discordapp.net/attachments/1.314967941682561e+18/1.4845738774419254e+18/image.png?ex=69beb8aa&is=69bd672a&hm=258e7f9ddc4075b53de40764c81a5d4f5ae70fd866ca532f52327a07a610adab&=&format=webp&quality=lossless&width=378&height=350';
     const DEFAULT_COVER = 'https://media.discordapp.net/attachments/1314967941682561075/1484585623061925909/b8d7056788ac539fcb980310ca89d204.png?ex=69bec39a&is=69bd721a&hm=434f3647e9926c1ac7f4785461e12b4a3a75e663445c999eb0b2f8a026a1c26b&=&format=webp&quality=lossless&width=169&height=350';
 
     let state = JSON.parse(localStorage.getItem(KEY) || '{"mode":"guest","urgent":false,"queues":[],"credits":[],"view":"list","creditPage":"1"}');
@@ -794,7 +830,7 @@
 
         const s = result.settings || {};
         branding.brand = s.brand || 'Ixging ʚìɞ';
-        branding.avatar = DEFAULT_AVATAR;
+        branding.avatar = s.avatar || DEFAULT_AVATAR;
         branding.cover = s.cover || '';
 
         saveState();
@@ -820,6 +856,11 @@
       const d = parseDateValue(dateStr);
       if (!d) return '-';
       return d.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit', year:'2-digit' });
+    }
+
+    function formatTodayLongThai() {
+      const d = new Date();
+      return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
     function formatDateTime(ts) {
@@ -1089,7 +1130,7 @@
 
     async function applyBranding() {
       const brand = document.getElementById('brandInput').value.trim() || 'Ixging ʚìɞ';
-      const avatar = pendingAvatarImage || document.getElementById('avatarInput').value.trim();
+      const avatar = pendingAvatarImage || document.getElementById('avatarInput').value.trim() || DEFAULT_AVATAR;
       const cover = pendingCoverImage || document.getElementById('coverInput').value.trim();
 
       branding.brand = brand;
@@ -1124,7 +1165,7 @@
         { id: Date.now() + 12, type: 'สลิป', page: '2', title: 'ตัวอย่างสลิปยืนยัน', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1200&auto=format&fit=crop', text: 'ใช้โชว์หลักฐานการโอนหรือเครดิตจากลูกค้า' }
       ];
 
-      await apiPost({ action: 'saveSettings', settings: { brand: 'Ixging ʚìɞ', avatar: branding.avatar || '', cover: branding.cover || '' } });
+      await apiPost({ action: 'saveSettings', settings: { brand: 'Ixging ʚìɞ', avatar: branding.avatar || DEFAULT_AVATAR, cover: branding.cover || '' } });
       for (const item of demoQueues) {
         await apiPost({ action: 'addQueue', ...item });
       }
@@ -1220,11 +1261,18 @@
 
       document.getElementById('brandName').textContent = branding.brand || 'Ixging ʚìɞ';
       document.getElementById('brandInput').value = branding.brand || 'Ixging ʚìɞ';
-      document.getElementById('avatarInput').value = DEFAULT_AVATAR;
+      document.getElementById('avatarInput').value = branding.avatar || DEFAULT_AVATAR;
       document.getElementById('coverInput').value = branding.cover || '';
 
-      document.getElementById('avatar').style.backgroundImage = `url('${DEFAULT_AVATAR}')`;
-      document.getElementById('hero').style.backgroundImage = branding.cover ? `url('${branding.cover}')` : 'linear-gradient(180deg, rgba(255,248,252,0.96), rgba(255,229,239,0.92))';
+      document.getElementById('avatar').style.backgroundImage = `url('${branding.avatar || DEFAULT_AVATAR}')`;
+      const hero = document.getElementById('hero');
+      if (branding.cover) {
+        hero.classList.add('has-cover');
+        hero.innerHTML = `<img class="hero-img" src="${branding.cover}" alt="รูปปกร้าน">`;
+      } else {
+        hero.classList.remove('has-cover');
+        hero.innerHTML = '<div class="hero-empty">เพิ่มรูปปกร้านได้จากเมนูตั้งค่าเว็บ</div>';
+      }
 
       const current = getCurrentQueue();
       document.getElementById('currentQueue').textContent = current ? `คิว ${current.customer}` : '-';
@@ -1237,6 +1285,7 @@
       const servingCount = sorted.filter(q => q.status === 'serving').length;
       document.getElementById('todayCount').textContent = sorted.length;
       document.getElementById('todayText').textContent = `รอคิว ${waitingCount} • กำลังทำ ${servingCount}`;
+      document.getElementById('todayDate').textContent = `วันที่ ${formatTodayLongThai()}`;
       const taskList = document.getElementById('taskList');
       if (!sorted.length) {
         taskList.innerHTML = '<div class="card" style="text-align:center; color:var(--text-soft);">ไม่มีคิวที่กำลังรอหรือกำลังทำอยู่ตอนนี้ 💖</div>';
